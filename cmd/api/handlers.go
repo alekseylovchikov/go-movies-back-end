@@ -1,11 +1,9 @@
 package main
 
 import (
-	"backend/internal/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 )
 
 /**
@@ -43,38 +41,11 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) AllLinks(w http.ResponseWriter, r *http.Request) {
-	var links []models.Link
-
-	// maybe I need this in the future
-	//added_at, _ := time.Parse("2023-01-01", "2023-01-01")
-
-	doctor := models.Link{
-		ID:          1,
-		Title:       "Doctor",
-		Description: "Hello world this is a description",
-		Phone:       "89991231212",
-		Email:       "hello@test.com",
-		Category:    "health",
-		Links:       "https://google.com",
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
+	links, err := app.DB.AllLinks()
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
-
-	links = append(links, doctor)
-
-	cat_doctor := models.Link{
-		ID:          2,
-		Title:       "Animal doctor",
-		Description: "Hello world this is a description",
-		Phone:       "89991231212",
-		Email:       "hello123@test.com",
-		Category:    "animal",
-		Links:       "https://google.com",
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}
-
-	links = append(links, cat_doctor)
 
 	out, err := json.Marshal(links)
 	if err != nil {
